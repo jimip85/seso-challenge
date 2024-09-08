@@ -1,36 +1,49 @@
-<img align="left" width="100px" height="100px" src="/assets/seso-eng-logo.png">
+# Log Merging Challenge
 
-# Seso Engineering | Challenge: Log Sorting
+This repository contains solutions for a log merging challenge, which involves combining log entries from multiple sources in chronological order. The challenge has both synchronous and asynchronous versions, and each solution aims to efficiently merge and print log entries while handling potential errors.
 
-<br>
+## Decision-Making and Design Choices
 
-## Instructions
+### Synchronous Solution
 
-We have a number of [**log sources**](https://github.com/sesolabor/glowing-octo-disco/blob/master/lib/log-source.js). Each log source contains N log entries. Each entry is a javascript object with a timestamp and message. We don't know the number of log entries each source contains - however - we do know that the entries within each source are sorted 🕒 **chronologically** 🕒.
+In the synchronous version, the goal is to merge logs from multiple sources and print them in chronological order. Here's why a min-heap was chosen:
 
-### The Objectives:
+- **Min-Heap for Efficiency**: A min-heap is an efficient data structure for managing a dynamically sorted list of elements. By using a min-heap, we can always access and remove the smallest (earliest) log entry efficiently. This ensures that we process logs in the correct chronological order without having to re-sort the entire list repeatedly.
 
-1. **_Drain all of the log sources_** for both the synchronous and asynchronous solutions.
-   - [Synchronous](https://github.com/sesolabor/glowing-octo-disco/blob/31313e303c53cebb96fa02f3aab473dd011e1d16/lib/log-source.js#L37)
-   - [Asynchronous](https://github.com/sesolabor/glowing-octo-disco/blob/31313e303c53cebb96fa02f3aab473dd011e1d16/lib/log-source.js#L45)
-1. Print all of the entries, across all of the sources, in chronological order.
-   - We don't need to store the log entries, just print them to stdout.
-1. Do this _efficiently_. There are time and space complexities afoot!
+- **Complexity**: The time complexity of inserting an element into a min-heap and extracting the minimum element is O(log n), where n is the number of elements in the heap. This makes the min-heap suitable for scenarios where we need to maintain a sorted order while frequently adding and removing elements.
 
-We expect candidates to spend 1-3 hours on this exercise.
+### Asynchronous Solution
 
-**We want to see you flex your CS muscles!!! Use the appropriate data structures to satisfy the time and space complexities inherent to the problem!!!**
+The asynchronous version extends the problem to handle log sources that provide log entries asynchronously. The design choices are as follows:
 
-## Pointers & Callouts
+- **Min-Heap for Asynchronous Handling**: Similar to the synchronous version, a min-heap is used to maintain chronological order of log entries. Asynchronous operations are handled using `async/await`, allowing us to fetch log entries in a non-blocking manner.
 
-- We don't know how many logs each source contains. A source could contain millions of entries and be exabytes in size! In other words, reading the entirety of a log source into memory won't work well.
-- Log sources could contain logs from last year, from yesterday, even from 100 years ago. We won't know the timeframe of a log source until we start looking.
-- Consider what would happen when asked to merge 1 million log sources. Where might bottlenecks arise?
+- **Error Handling**: Errors during asynchronous log fetching are caught and logged, ensuring that issues with individual log sources do not halt the entire process. The `printer.done()` method is called even in case of errors to ensure that the final processing step is completed.
 
-There are two parts of the challenge which you'll see when diving into things. You can get started by running `npm start`.
+- **Complexity and Concurrency**: Asynchronous operations are managed using Promises to handle concurrent fetching of log entries. This approach helps to make the most of available resources and improves the overall performance by avoiding blocking operations.
 
-## Submitting
+## How to Run
 
-Create a GitHub repo and email your point of contact the link.
+1. Clone the repository:
+   ```bash
+   git clone <repository>
 
-If - for whatever reason - you cannot create a GitHub repo for this challenge, it is also acceptable to 'zip' the directory and provide your submission as an email attachment.
+2. Install dependencies:
+   ```bash
+   npm install
+
+3. Run sync & async solutions:
+   ```bash
+   npm start
+
+## Testing
+
+To ensure correctness, comprehensive tests are included. They cover various scenarios such as empty sources, single and multiple sources with varying sizes, and performance with a large number of sources.
+
+1. Run Tests:
+   ```bash
+   npm test
+
+## Conclusion
+
+The chosen approach leverages a min-heap for its efficiency in maintaining sorted order, both in synchronous and asynchronous contexts. This design ensures optimal performance while handling logs from multiple sources effectively.
