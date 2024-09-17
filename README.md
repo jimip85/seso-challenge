@@ -1,32 +1,34 @@
 # Log Merging Challenge
 
-This repository contains solutions for a log merging challenge, which involves combining log entries from multiple sources in chronological order. The challenge has both synchronous and asynchronous versions, and each solution aims to efficiently merge and print log entries while handling potential errors.
+This repository contains solutions for a log merging challenge, which involves combining log entries from multiple sources in chronological order. The challenge includes both synchronous and asynchronous versions, each designed to efficiently merge and print log entries while addressing potential errors.
 
 ## Decision-Making and Design Choices
 
 ### Synchronous Solution
 
-In the synchronous version, the goal is to merge logs from multiple sources and print them in chronological order. Here's why a min-heap was chosen:
+In the synchronous version, the objective is to merge logs from multiple sources and print them in chronological order. Key design choices include:
 
-- **Min-Heap for Efficiency**: A min-heap is an efficient data structure for managing a dynamically sorted list of elements. By using a min-heap, we can always access and remove the smallest (earliest) log entry efficiently. This ensures that we process logs in the correct chronological order without having to re-sort the entire list repeatedly.
+- **Min-Heap for Efficiency**: A min-heap is used to efficiently manage the dynamically sorted list of log entries. By leveraging the min-heap, we can always retrieve and remove the earliest log entry, ensuring correct chronological order without frequent re-sorting.
 
-- **Complexity**: The time complexity of inserting an element into a min-heap and extracting the minimum element is O(log n), where n is the number of elements in the heap. This makes the min-heap suitable for scenarios where we need to maintain a sorted order while frequently adding and removing elements.
+- **Complexity**: Inserting or removing elements from a min-heap takes O(log n), where n is the number of elements in the heap. This ensures efficient management of log entries as they are processed.
 
 ### Asynchronous Solution
 
-The asynchronous version extends the problem to handle log sources that provide log entries asynchronously. The design choices are as follows:
+In the asynchronous solution, the log sources provide entries asynchronously. Key considerations include:
 
-- **Min-Heap for Asynchronous Handling**: Similar to the synchronous version, a min-heap is used to maintain chronological order of log entries. Asynchronous operations are handled using `async/await`, allowing us to fetch log entries in a non-blocking manner.
+- **Min-Heap for Asynchronous Handling**: As in the synchronous solution, a min-heap is employed to maintain the correct order of log entries. Asynchronous operations are managed using `async/await` to fetch log entries without blocking.
 
-- **Error Handling**: Errors during asynchronous log fetching are caught and logged, ensuring that issues with individual log sources do not halt the entire process. The `printer.done()` method is called even in case of errors to ensure that the final processing step is completed.
+- **Error Handling**: Errors during asynchronous log fetching are handled gracefully by catching and logging errors. Even if one log source fails, the rest of the process continues. The `printer.done()` method is called regardless of errors to ensure final completion of the process.
 
-- **Complexity and Concurrency**: Asynchronous operations are managed using Promises to handle concurrent fetching of log entries. This approach helps to make the most of available resources and improves the overall performance by avoiding blocking operations.
+- **Concurrency**: The asynchronous solution leverages Promises to fetch log entries concurrently, optimizing resource usage and improving overall performance by minimizing blocking operations.
 
 ## How to Run
 
+To run the project, follow these steps:
+
 1. Clone the repository:
    ```bash
-   git clone <repository>
+   git clone <repository-url>
 
 2. Install dependencies:
    ```bash
